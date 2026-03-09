@@ -3,9 +3,7 @@ import { RouterProvider } from "react-router/dom";
 import { Settings } from "./pages/Settings";
 import Dashboard from "./pages/Dashboard";
 import Home from "./pages/Home";
-import { UserLayout } from "./layouts/UserLayout";
-import { User } from "./pages/User";
-import { EditUser } from "./pages/EditUser";
+import { Users } from "./pages/Users";
 import { NotFound } from "@/pages/NotFoundPage";
 import { useState } from "react";
 import AuthPage from "./pages/AuthPage";
@@ -13,25 +11,23 @@ import { HeroGeometric } from "./pages/Hero";
 import GuestLayout from "./layouts/GuestLayout";
 import AuthLayout from "./layouts/AuthLayout";
 
- 
-
 function App() {
-  function authFromStorage(){
-    const value = localStorage.getItem('Auth')
+  function authFromStorage() {
+    const value = localStorage.getItem("Auth");
 
-    return value ? true : false
+    return value ? true : false;
   }
 
   const [auth, setAuth] = useState(authFromStorage);
 
-  function handleAuthenticationToggle(){
-      if (auth){
-        localStorage.removeItem('Auth')
-        setAuth(false)
-      } else {
-        localStorage.setItem('Auth', 'true')
-        setAuth(true)
-      }
+  function handleAuthenticationToggle() {
+    if (auth) {
+      localStorage.removeItem("Auth");
+      setAuth(false);
+    } else {
+      localStorage.setItem("Auth", "true");
+      setAuth(true);
+    }
   }
 
   const router = createBrowserRouter([
@@ -51,32 +47,19 @@ function App() {
             />
           ),
         },
+      ],
+    },
+    {
+      element: <AuthLayout isAuthenticated={auth} />,
+      children: [
+        // Nested Routes
         {
-          element: <AuthLayout isAuthenticated={auth} />,
-          children: [
-            // Nested Routes
-            {
-              path: "/dashboard",
-              Component: Dashboard,
-              children: [
-                { index: true, Component: Home },
-                { path: "settings", Component: Settings },
-              ],
-            },
-          ],
+          path: "/dashboard",
+          Component: Dashboard,
+          children: [{ index: true, Component: Home }],
         },
-
-        // Layout Route
-        // {
-        //   Component: UserLayout, // No Path
-        //   children: [
-        //     { index: true, Component: User },
-        //     {
-        //       path: ":id/edit",
-        //       Component: EditUser,
-        //     },
-        //   ],
-        // },
+        { path: "users", Component: Users },
+        { path: "settings", Component: Settings },
       ],
     },
     {

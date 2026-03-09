@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { motion } from "framer-motion"
-import { Link } from "react-router"
+import { Link, useLocation } from "react-router"
 import type { LucideIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -16,7 +16,7 @@ interface NavBarProps {
 }
 
 export function NavBar({ items, className }: NavBarProps) {
-  const [activeTab, setActiveTab] = useState(items[0].name)
+  const [activeTab, setActiveTab] = useState((window.location.pathname == '/auth') ? 'Auth' : items[0].name)
   const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
@@ -28,6 +28,8 @@ export function NavBar({ items, className }: NavBarProps) {
     window.addEventListener("resize", handleResize)
     return () => window.removeEventListener("resize", handleResize)
   }, [])
+
+  console.log(activeTab)
 
   return (
     <div

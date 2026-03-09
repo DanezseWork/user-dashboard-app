@@ -28,7 +28,7 @@ export default function GuestLayout(){
 
     return(
         <>
-            <NavBar items={pages} />
+            <NavBar items={pages}/>
             <Outlet />
         </>
     )
