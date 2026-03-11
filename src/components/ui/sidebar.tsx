@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Home, User, Settings, Users } from "lucide-react";
@@ -103,19 +101,28 @@ const Sidebar = () => {
               <nav className="flex-1 p-4 overflow-y-auto">
                 <ul>
                   <li className="mb-2">
-                    <Link to="dashboard" className="flex gap-2 font-medium text-sm items-center w-full py-2 px-4 rounded-xl hover:bg-gray-100">
+                    <Link
+                      to="dashboard"
+                      className="flex gap-2 font-medium text-sm items-center w-full py-2 px-4 rounded-xl hover:bg-gray-100"
+                    >
                       <Home className="h-5 w-5" />
                       Home
                     </Link>
                   </li>
                   <li className="mb-2">
-                    <Link to="users" className="flex gap-2 font-medium text-sm items-center w-full py-2 px-4 rounded-xl hover:bg-gray-100">
+                    <Link
+                      to="users"
+                      className="flex gap-2 font-medium text-sm items-center w-full py-2 px-4 rounded-xl hover:bg-gray-100"
+                    >
                       <Users className="h-5 w-5" />
                       Users
                     </Link>
                   </li>
                   <li className="mb-2">
-                    <Link to="settings" className="flex gap-2 font-medium text-sm items-center w-full py-2 px-4 rounded-xl hover:bg-gray-100">
+                    <Link
+                      to="settings"
+                      className="flex gap-2 font-medium text-sm items-center w-full py-2 px-4 rounded-xl hover:bg-gray-100"
+                    >
                       <Settings className="h-5 w-5" />
                       Settings
                     </Link>
@@ -124,9 +131,11 @@ const Sidebar = () => {
               </nav>
               {/* Footer / Action Button */}
               <div className="p-4 border-t border-gray-200">
-                <button className="w-full font-medium text-sm p-2 text-center bg-red-100 rounded-xl hover:bg-red-200">
-                  Log out
-                </button>
+                <a href="/">
+                  <button className="w-full font-medium text-sm p-2 text-center bg-red-100 rounded-xl hover:bg-red-200">
+                    Log out
+                  </button>
+                </a>
               </div>
             </div>
           </motion.div>
@@ -151,19 +160,28 @@ const Sidebar = () => {
         <nav className="flex-1 p-4 overflow-y-auto">
           <ul>
             <li className="mb-2">
-              <Link to="dashboard" className="flex gap-2 font-medium text-sm items-center w-full py-2 px-4 rounded-xl hover:bg-gray-100">
+              <Link
+                to="dashboard"
+                className="flex gap-2 font-medium text-sm items-center w-full py-2 px-4 rounded-xl hover:bg-gray-100"
+              >
                 <Home className="h-5 w-5" />
                 Home
               </Link>
             </li>
             <li className="mb-2">
-              <Link to="users" className="flex gap-2 font-medium text-sm items-center w-full py-2 px-4 rounded-xl hover:bg-gray-100">
+              <Link
+                to="users"
+                className="flex gap-2 font-medium text-sm items-center w-full py-2 px-4 rounded-xl hover:bg-gray-100"
+              >
                 <Users className="h-5 w-5" />
                 Users
               </Link>
             </li>
             <li className="mb-2">
-              <Link to="settings" className="flex gap-2 font-medium text-sm items-center w-full py-2 px-4 rounded-xl hover:bg-gray-100">
+              <Link
+                to="settings"
+                className="flex gap-2 font-medium text-sm items-center w-full py-2 px-4 rounded-xl hover:bg-gray-100"
+              >
                 <Settings className="h-5 w-5" />
                 Settings
               </Link>
@@ -172,9 +190,11 @@ const Sidebar = () => {
         </nav>
         {/* Footer / Action Button */}
         <div className="p-4 border-t border-gray-200">
-          <button className="w-full font-medium text-sm p-2 text-center bg-red-100 rounded-xl hover:bg-red-200">
-            Log out
-          </button>
+          <a href="/">
+            <button className="w-full font-medium text-sm p-2 text-center bg-red-100 rounded-xl hover:bg-red-200">
+              Log out
+            </button>
+          </a>
         </div>
       </div>
 
@@ -186,10 +206,6 @@ const Sidebar = () => {
           <AnimatedMenuToggle toggle={toggleSidebar} isOpen={isOpen} />
         </div>
         <div className="p-6">
-          <h1 className="text-2xl font-bold">Main Content</h1>
-          <p className="text-sm font-medium">
-            Additional details and settings can be found here.
-          </p>
           <Outlet />
         </div>
       </div>

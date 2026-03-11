@@ -6,10 +6,6 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -27,86 +23,185 @@ import {
   ComboboxItem,
   ComboboxList,
 } from "@/components/ui/combobox";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+  FieldLegend,
+  FieldSet,
+} from "@/components/ui/field";
 
-type Framework = {
+type Job = {
   label: string;
   value: string;
 };
 
-const frameworks: Framework[] = [
-  { label: "Next.js", value: "next" },
-  { label: "SvelteKit", value: "sveltekit" },
-  { label: "Nuxt", value: "nuxt" },
+const jobs: Job[] = [
+  { label: "Manager", value: "manager" },
+  { label: "Admin", value: "admin" },
+  { label: "Staff", value: "staff" },
 ];
 
 export function Users() {
   const [date, setDate] = React.useState<Date>();
-  const [selectedFramework, setSelectedFramework] =
-    React.useState<Framework | null>(null);
-
+  const [selectedJob, setSelectedJob] = React.useState<Job | null>(null);
   const dialogContentRef = React.useRef<HTMLDivElement | null>(null);
+  const [errorMessages, setErrorMessages] = React.useState({
+    name: "",
+    email: "",
+    date: "",
+    role: "",
+  });
+
+  function addUser(formData: FormData) {
+    const name = formData.get("name");
+    const email = formData.get("email");
+    const role = formData.get("role");
+    let nameMessage = "";
+    let dateMessage = "";
+    let emailMessage = "";
+    let roleMessage = "";
+    const emailPattern =
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+    if (typeof name !== "string" || name === "") {
+      nameMessage = "Name is required";
+    } else if (!/^[a-zA-Z]+$/.test(name)) {
+      nameMessage = "Name should be letters only";
+    }
+
+    if (typeof email !== "string" || email === "") {
+      emailMessage = "Email is required";
+    } else if (!emailPattern.test(email)) {
+      emailMessage = "Enter a valid Email";
+    }
+
+    if (date == undefined) {
+      dateMessage = "Date is required";
+    }
+
+    if (role == "") {
+      roleMessage = "Role is required";
+    }
+
+    setErrorMessages({
+      name: nameMessage,
+      email: emailMessage,
+      date: dateMessage,
+      role: roleMessage,
+    });
+
+    console.log("Form Submitted");
+  }
+
+  function handleClose() {
+    setErrorMessages({
+      name: "",
+      email: "",
+      date: "",
+      role: "",
+    });
+  }
 
   return (
-    <Dialog>
+    <Dialog onOpenChange={handleClose}>
       <DialogTrigger asChild>
         <Button>Add User</Button>
       </DialogTrigger>
 
       <DialogContent ref={dialogContentRef}>
-        <DialogHeader>
-          <DialogTitle>Add User</DialogTitle>
-          <DialogDescription>Create a User</DialogDescription>
-        </DialogHeader>
-
-        <form action="">
-          <div className="flex flex-col gap-2">
-            <Input name="name" placeholder="Name" />
-            <Input name="email" placeholder="Email" />
-
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  data-empty={!date}
-                  className="justify-start gap-2 text-left font-normal data-[empty=true]:text-muted-foreground"
+        <FieldSet>
+          <FieldLegend>Add User</FieldLegend>
+          <FieldDescription>Create a User</FieldDescription>
+          <form action={addUser}>
+            <FieldGroup>
+              <Field>
+                <FieldLabel>Name</FieldLabel>
+                <Input
+                  name="name"
+                  placeholder="Name"
+                  className={errorMessages.name && "border-destructive"}
+                />
+                <FieldError>{errorMessages.name}</FieldError>
+              </Field>
+              <Field>
+                <FieldLabel>Email</FieldLabel>
+                <Input
+                  name="email"
+                  placeholder="Email"
+                  className={errorMessages.email && "border-destructive"}
+                />
+                <FieldError>{errorMessages.email}</FieldError>
+              </Field>
+              <Field>
+                <FieldLabel>Joined Date</FieldLabel>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      data-empty={!date}
+                      className={`justify-start gap-2 text-left font-normal data-[empty=true]:text-muted-foreground ${errorMessages.date && "border-destructive"}`}
+                    >
+                      <CalendarIcon />
+                      {date ? format(date, "PPP") : <span>Joined Date</span>}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0">
+                    <Calendar
+                      mode="single"
+                      selected={date}
+                      onSelect={setDate}
+                    />
+                  </PopoverContent>
+                </Popover>
+                <FieldError>{errorMessages.date}</FieldError>
+              </Field>
+              <Field>
+                <FieldLabel>Job Role</FieldLabel>
+                <Combobox
+                  items={jobs}
+                  value={selectedJob}
+                  onValueChange={setSelectedJob}
+                  itemToStringValue={(job) => job.label}
                 >
-                  <CalendarIcon />
-                  {date ? format(date, "PPP") : <span>Pick a date</span>}
+                  <ComboboxInput
+                    placeholder="Job Role"
+                    name="role"
+                    className={errorMessages.role && "border-destructive"}
+                  />
+                  <ComboboxContent portalContainer={dialogContentRef}>
+                    <ComboboxEmpty>No items found.</ComboboxEmpty>
+                    <ComboboxList>
+                      {(job) => (
+                        <ComboboxItem key={job.value} value={job}>
+                          {job.label}
+                        </ComboboxItem>
+                      )}
+                    </ComboboxList>
+                  </ComboboxContent>
+                </Combobox>
+                <FieldError>{errorMessages.role}</FieldError>
+              </Field>
+              <Field>
+                <div className="flex gap-2 items-center pb-4">
+                  <Checkbox />
+                  <FieldLabel>Receive Email Notifications</FieldLabel>
+                </div>
+              </Field>
+            </FieldGroup>
+            <div className="flex justify-end gap-2 pt-4 border-t">
+              <DialogClose asChild>
+                <Button variant="outline" onClick={handleClose}>
+                  Close
                 </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0">
-                <Calendar mode="single" selected={date} onSelect={setDate} />
-              </PopoverContent>
-            </Popover>
-
-            <Combobox
-              items={frameworks}
-              value={selectedFramework}
-              onValueChange={setSelectedFramework}
-              itemToStringValue={(framework) => framework.label}
-            >
-              <ComboboxInput placeholder="Select a framework" />
-              <ComboboxContent portalContainer={dialogContentRef}>
-                <ComboboxEmpty>No items found.</ComboboxEmpty>
-                <ComboboxList>
-                  {(framework) => (
-                    <ComboboxItem key={framework.value} value={framework}>
-                      {framework.label}
-                    </ComboboxItem>
-                  )}
-                </ComboboxList>
-              </ComboboxContent>
-            </Combobox>
-
-          </div>
-        </form>
-
-        <DialogFooter>
-          <DialogClose asChild>
-            <Button variant="outline">Close</Button>
-          </DialogClose>
-          <Button type="submit">Submit</Button>
-        </DialogFooter>
+              </DialogClose>
+              <Button type="submit">Submit</Button>
+            </div>
+          </form>
+        </FieldSet>
       </DialogContent>
     </Dialog>
   );
