@@ -1,13 +1,13 @@
 import { createBrowserRouter } from "react-router";
 import { RouterProvider } from "react-router/dom";
-import { Settings } from "./pages/Settings";
-import Dashboard from "./pages/Dashboard";
-import Home from "./pages/Home";
-import { Users } from "./pages/Users";
+import { Settings } from "./pages/authenticated/Settings";
+import Dashboard from "./pages/authenticated/Dashboard";
+import Home from "./pages/authenticated/Home";
+import { Users } from "./pages/authenticated/Users";
 import { NotFound } from "@/pages/NotFoundPage";
 import { useState } from "react";
-import AuthPage from "./pages/AuthPage";
-import { HeroGeometric } from "./pages/Hero";
+import AuthPage from "./pages/guest/AuthPage";
+import { HeroGeometric } from "./pages/guest/LandingPage";
 import GuestLayout from "./layouts/GuestLayout";
 import AuthLayout from "./layouts/AuthLayout";
 
